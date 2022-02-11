@@ -1,11 +1,13 @@
-package kz.bitlab.m3_ch1.service;
+package kz.bitlab.m3_ch1.repository;
 
 import kz.bitlab.m3_ch1.model.Student;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBManager {
+@Repository
+public class DBManager implements StudentRepository {
 
     private static List<Student> studentList = new ArrayList<>();
 
@@ -19,17 +21,20 @@ public class DBManager {
 
     private static Long id = 6L;
 
-    public static List<Student> getAllStudents() {
+    @Override
+    public List<Student> getAllStudents() {
         return studentList;
     }
 
-    public static void addStudent(Student student) {
+    @Override
+    public void addStudent(Student student) {
         student.setId(id);
         studentList.add(student);
         id++;
     }
 
-    public static Student getStudentById(Long id) {
+    @Override
+    public Student getStudentById(Long id) {
         for (Student student : studentList) {
             if (student.getId() == id) return student;
         }
