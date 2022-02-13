@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @AllArgsConstructor
-//@NoArgsConstructor
+@NoArgsConstructor
 @ToString
 @Component
 public class Student {
@@ -13,8 +13,4 @@ public class Student {
     private String name;
     private String birthday;
     private String city;
-
-    public Student() {
-        System.out.println("bean Student was created");
-    }
 }
