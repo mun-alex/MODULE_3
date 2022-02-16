@@ -1,12 +1,14 @@
 package kz.bitlab.m3_ch1.repository;
 
-import kz.bitlab.m3_ch1.model.Student;
+import kz.bitlab.m3_ch1.entities.Student;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface StudentRepository {
-    List<Student> getAllStudents();
-    void addStudent(Student student);
-    Student getStudentById(Long id);
+@Repository
+@Transactional
+public interface StudentRepository extends JpaRepository<Student, Long> {
+
 }

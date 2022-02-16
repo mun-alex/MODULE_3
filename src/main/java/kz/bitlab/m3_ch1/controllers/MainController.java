@@ -1,7 +1,6 @@
 package kz.bitlab.m3_ch1.controllers;
 
-import kz.bitlab.m3_ch1.model.Student;
-import kz.bitlab.m3_ch1.repository.DBManager;
+import kz.bitlab.m3_ch1.entities.Student;
 import kz.bitlab.m3_ch1.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,5 +31,20 @@ public class MainController {
     public String getStudentById(Model model, @PathVariable(name = "studentId") Long id) {
         model.addAttribute("student", studentService.getStudentById(id));
         return "/details";
+    }
+
+    @PostMapping(value = "/update-student/{studentId}")
+    public String updateStudent(@PathVariable(name = "studentId") Long studentId,
+                                @RequestParam(name = "studentName") String name,
+                                @RequestParam(name = "studentBirthday") String birthday,
+                                @RequestParam(name = "studentCity") String city) {
+        studentService.updateStudent(new Student(studentId, name, birthday, city));
+        return "redirect:/";
+    }
+
+    @GetMapping(value = "/delete-student/{studentId}")
+    public String deleteStudent(@PathVariable(name = "studentId") Long studentId) {
+        studentService.deleteStudentById(studentId);
+        return "redirect:/";
     }
 }

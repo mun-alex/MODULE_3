@@ -1,6 +1,6 @@
 package kz.bitlab.m3_ch1.service.impl;
 
-import kz.bitlab.m3_ch1.model.Student;
+import kz.bitlab.m3_ch1.entities.Student;
 import kz.bitlab.m3_ch1.repository.StudentRepository;
 import kz.bitlab.m3_ch1.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +16,26 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> getAllStudents() {
-        return studentRepository.getAllStudents();
+        return studentRepository.findAll();
     }
 
     @Override
     public void addStudent(Student student) {
-        studentRepository.addStudent(student);
+        studentRepository.save(student);
     }
 
     @Override
     public Student getStudentById(Long id) {
-        return studentRepository.getStudentById(id);
+        return studentRepository.getById(id);
+    }
+
+    @Override
+    public void updateStudent(Student student) {
+        studentRepository.save(student);
+    }
+
+    @Override
+    public void deleteStudentById(Long id) {
+        studentRepository.deleteById(id);
     }
 }

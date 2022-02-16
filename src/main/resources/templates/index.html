@@ -13,6 +13,7 @@
             <th scope="col">Birthday</th>
             <th scope="col">City</th>
             <th scope="col">Details</th>
+            <th scope="col">Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -22,59 +23,13 @@
             <td th:text="${student.birthday}"></td>
             <td th:text="${student.city}"></td>
             <td><a th:href="@{'/details/' + ${student.id}}" class="btn btn-success">Details</a></td>
+            <td><a th:href="@{'/delete-student/' + ${student.id}}" class="btn btn-danger">Delete</a></td>
         </tr>
         </tbody>
     </table>
 </div>
 
-<!--<div class="container">-->
-<!--    <div class="row">-->
-<!--        <div class="col-lg-12">-->
-<!--            <ul class="nav bg-secondary">-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link text-white" th:href="@{'/'}">All Students</a>-->
-<!--                </li>-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#addStudent">Add Student</a>-->
-<!--                </li>-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link text-white" th:href="@{'/cities'}">Cities</a>-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <h3 class="text-center">Students</h3>-->
-<!--    <div class="row">-->
-<!--        <div class="col-lg-3 bg-secondary">-->
-<!--            <a class="nav-link text-white fw-bold" href="">Almaty</a>-->
-<!--            <a class="nav-link text-white fw-bold" href="">Uralsk</a>-->
-<!--            <a class="nav-link text-white fw-bold" href="">Shimkent</a>-->
-<!--        </div>-->
-<!--        -->
-<!--        <div class="col-lg-9">-->
-<!--            <table class="table table-striped">-->
-<!--                <thead>-->
-<!--                <tr>-->
-<!--                    <th scope="col">#</th>-->
-<!--                    <th scope="col">Name</th>-->
-<!--                    <th scope="col">Birthday</th>-->
-<!--                    <th scope="col">City</th>-->
-<!--                    <th scope="col">Details</th>-->
-<!--                </tr>-->
-<!--                </thead>-->
-<!--                <tbody>-->
-<!--                <tr th:each="student : ${students}">-->
-<!--                    <th scope="row" th:text="${student.id}"></th>-->
-<!--                    <td th:text="${student.name}"></td>-->
-<!--                    <td th:text="${student.birthday}"></td>-->
-<!--                    <td th:text="${student.city}"></td>-->
-<!--                    <td><a th:href="@{'/details/' + ${student.id}}" class="btn btn-success">Details</a></td>-->
-<!--                </tr>-->
-<!--                </tbody>-->
-<!--            </table>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+
 
 <!-- Modal -->
 <div class="modal fade" id="addStudent">
