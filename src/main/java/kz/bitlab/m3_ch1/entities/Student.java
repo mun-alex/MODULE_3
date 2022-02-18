@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "students")
@@ -25,6 +26,9 @@ public class Student {
     @Column(name = "student_birthday", length = 100)
     private String birthday;
 
-    @Column(name = "student_city", length = 100)
-    private String city;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private City city;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Sport> sportList;
 }

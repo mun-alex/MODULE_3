@@ -9,57 +9,49 @@
     <title>Title</title>
 </head>
 <body>
-<div class="col-lg-5 m-5 m-auto" layout:fragment="content">
-    <form th:action="@{'/update-student/' + ${student.id}}" method="post">
-        <div class="mb-3">
-            <label for="studentName" class="form-label">Name</label>
-            <input type="text" class="form-control" id="studentName" name="studentName" th:value="${student.name}">
+<div class="col-lg-8" layout:fragment="content">
+    <div class="row">
+        <div class="col-lg-8 m-5 m-auto">
+            <form th:action="@{'/update-student/' + ${student.id}}" method="post" th:object="${student}">
+                <div class="mb-3">
+                    <label for="studentName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="studentName" name="studentName" th:value="${student.name}" th:field="*{name}">
+                </div>
+                <div class="mb-3">
+                    <label for="studentBirthday" class="form-label">Birthday</label>
+                    <input type="date" class="form-control" id="studentBirthday" name="studentBirthday" th:value="${student.birthday}" th:field="*{birthday}">
+                </div>
+                <div class="mb-3">
+                    <label for="studentCity" class="form-label">City</label>
+                    <select name="studentCity" id="studentCity" th:field="*{city.id}" class="form-control">
+                        <option th:each="city: ${cities}" th:value="${city.id}" th:text="${city.cityName}"></option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <a th:href="@{'/'}" class="btn btn-secondary">Close</a>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="studentBirthday" class="form-label">Birthday</label>
-            <input type="date" class="form-control" id="studentBirthday" name="studentBirthday" th:value="${student.birthday}">
+    </div>
+    <div class="row">
+        <div class="col-lg-8 mt-3 m-auto">
+            <table class="table table-striped">
+                <h5>Sport Arts</h5>
+                <tbody>
+                <tr th:each="sport : ${sports}">
+                    <form th:action="@{'/add-sport'}" method="post">
+                        <input type="hidden" name="studentId" th:value="${student.id}">
+                        <input type="hidden" name="sportId" th:value="${sport.id}">
+                        <td th:text="${sport.sportArt}"></td>
+                        <td><button type="submit" class="btn btn-success">+</button></td>
+                    </form>
+                </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="mb-3">
-            <label for="studentCity" class="form-label">City</label>
-            <input type="text" class="form-control" id="studentCity" name="studentCity" th:value="${student.city}">
-        </div>
-        <div class="modal-footer">
-            <a th:href="@{'/'}" class="btn btn-secondary">Close</a>
-            <button type="submit" class="btn btn-primary">Save</button>
-        </div>
-    </form>
+    </div>
 </div>
-<!--<div class="container">-->
-<!--    <ul class="nav">-->
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link" th:href="@{'/'}">All Students</a>-->
-<!--        </li>-->
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#addStudent">Add Student</a>-->
-<!--        </li>-->
-<!--    </ul>-->
-<!--    <div class="row">-->
-<!--        <div class="col-lg-5 m-5 m-auto">-->
-<!--            <form>-->
-<!--                <div class="mb-3">-->
-<!--                    <label for="studentName" class="form-label">Name</label>-->
-<!--                    <input type="text" class="form-control" id="studentName" name="studentName" th:value="${student.name}">-->
-<!--                </div>-->
-<!--                <div class="mb-3">-->
-<!--                    <label for="studentBirthday" class="form-label">Birthday</label>-->
-<!--                    <input type="date" class="form-control" id="studentBirthday" name="studentBirthday" th:value="${student.birthday}">-->
-<!--                </div>-->
-<!--                <div class="mb-3">-->
-<!--                    <label for="studentCity" class="form-label">City</label>-->
-<!--                    <input type="text" class="form-control" id="studentCity" name="studentCity" th:value="${student.city}">-->
-<!--                </div>-->
-<!--                <div class="modal-footer">-->
-<!--                    <a th:href="@{'/'}" class="btn btn-secondary">Close</a>-->
-<!--                    <button type="submit" class="btn btn-primary">Add</button>-->
-<!--                </div>-->
-<!--            </form>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+
 </body>
 </html>

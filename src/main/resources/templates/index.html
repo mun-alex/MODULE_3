@@ -21,43 +21,43 @@
             <th scope="row" th:text="${student.id}"></th>
             <td th:text="${student.name}"></td>
             <td th:text="${student.birthday}"></td>
-            <td th:text="${student.city}"></td>
+            <td th:text="${student.city!=null?student.city.cityName:''}"></td>
             <td><a th:href="@{'/details/' + ${student.id}}" class="btn btn-success">Details</a></td>
             <td><a th:href="@{'/delete-student/' + ${student.id}}" class="btn btn-danger">Delete</a></td>
         </tr>
         </tbody>
     </table>
-</div>
 
-
-
-<!-- Modal -->
-<div class="modal fade" id="addStudent">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Student</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form th:action="@{'/add-student'}" method="post">
-                    <div class="mb-3">
-                        <label for="studentName" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="studentName" name="studentName">
-                    </div>
-                    <div class="mb-3">
-                        <label for="studentBirthday" class="form-label">Birthday</label>
-                        <input type="date" class="form-control" id="studentBirthday" name="studentBirthday">
-                    </div>
-                    <div class="mb-3">
-                        <label for="studentCity" class="form-label">City</label>
-                        <input type="text" class="form-control" id="studentCity" name="studentCity">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add</button>
-                    </div>
-                </form>
+    <!-- Modal -->
+    <div class="modal fade" id="addStudent">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Student</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{'/add-student'}" method="post" th:object="${student}">
+                        <div class="mb-3">
+                            <label for="studentName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="studentName" name="studentName" th:field="*{name}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="studentBirthday" class="form-label">Birthday</label>
+                            <input type="date" class="form-control" id="studentBirthday" name="studentBirthday" th:field="*{birthday}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="studentCity" class="form-label">City</label>
+                            <select name="studentCity" id="studentCity" th:field="*{city.id}" class="form-control">
+                                <option th:each="city: ${cities}" th:value="${city.id}" th:text="${city.cityName}"></option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
