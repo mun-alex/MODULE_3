@@ -4,7 +4,7 @@
       xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
       layout:decorate="layouts/layout">
 <body>
-<div class="col-lg-9" layout:fragment="content">
+<div class="col-lg-10" layout:fragment="content">
     <table class="table table-striped">
         <thead>
         <tr>
@@ -12,8 +12,8 @@
             <th scope="col">Name</th>
             <th scope="col">Birthday</th>
             <th scope="col">City</th>
-            <th scope="col">Details</th>
-            <th scope="col">Delete</th>
+            <th scope="col" class="text-center">Details</th>
+            <th scope="col" class="text-center">Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -22,8 +22,8 @@
             <td th:text="${student.name}"></td>
             <td th:text="${student.birthday}"></td>
             <td th:text="${student.city!=null?student.city.cityName:''}"></td>
-            <td><a th:href="@{'/details/' + ${student.id}}" class="btn btn-success">Details</a></td>
-            <td><a th:href="@{'/delete-student/' + ${student.id}}" class="btn btn-danger">Delete</a></td>
+            <td class="text-center"><a th:href="@{'/details/' + ${student.id}}" class="btn btn-success">Details</a></td>
+            <td class="text-center"><a th:href="@{'/delete-student/' + ${student.id}}" class="btn btn-danger">Delete</a></td>
         </tr>
         </tbody>
     </table>

@@ -5,6 +5,7 @@ import kz.bitlab.m3_ch1.entities.Student;
 import kz.bitlab.m3_ch1.service.CityService;
 import kz.bitlab.m3_ch1.service.SportService;
 import kz.bitlab.m3_ch1.service.StudentService;
+import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -81,5 +82,14 @@ public class MainController {
             }
         }
         return "redirect:/";
+    }
+
+    @GetMapping(value = "/filter-city/{cityId}")
+    public String allStudentsByCity(@PathVariable(name = "cityId") Long cityId,
+                                    Model model) {
+        model.addAttribute("students", studentService.getAllStudentsByCityId(cityId));
+        model.addAttribute("cities", cityService.getAllCities());
+        model.addAttribute("student", emptyStudent);
+        return "index";
     }
 }

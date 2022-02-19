@@ -5,36 +5,11 @@
 <head th:replace="fragments/head :: head"></head>
 <body>
 <div class="container">
-    <div class="row bg-secondary p-2">
-        <div class="col-lg-12">
-            <ul class="nav">
-                <li class="nav-item">
-                    <a class="nav-link text-white" th:href="@{'/'}" th:text="#{label.all_students}"></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#addStudent" th:text="#{label.add_student}"></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" th:href="@{'/cities'}">Cities</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="?lng=kz">KZ</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="?lng=ru">RU</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="?lng=en">ENG</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <h3 class="text-center">Students</h3>
+    <div th:replace="fragments/nav :: nav"></div>
+    <h3 class="text-center mt-3">Students</h3>
     <div class="row">
-        <div class="col-lg-3 bg-secondary">
-            <a class="nav-link text-white fw-bold" href="">Almaty</a>
-            <a class="nav-link text-white fw-bold" href="">Uralsk</a>
-            <a class="nav-link text-white fw-bold" href="">Shimkent</a>
+        <div class="col-lg-2 bg-secondary pt-3">
+            <a class="nav-link text-white fw-bold" th:href="@{'/filter-city/' + ${city.id}}" th:each="city:${cities}" th:text="${city.cityName}"></a>
         </div>
         <div layout:fragment="content"></div>
     </div>

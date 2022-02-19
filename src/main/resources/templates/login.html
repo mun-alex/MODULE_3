@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div class="container">
+    <div th:replace="fragments/nav :: nav"></div>
+    <div class="row">
+        <div class="col-lg-4 m-auto mt-5">
+            <form th:action="@{'/auth'}" method="post">
+                <div class="mb-3">
+                    <label for="userEmail" class="form-label">Email:</label>
+                    <input type="text" class="form-control" id="userEmail" name="uni_user_email">
+                </div>
+                <div class="mb-3">
+                    <label for="userPassword" class="form-label">Password:</label>
+                    <input type="password" class="form-control" id="userPassword" name="uni_user_password">
+                </div>
+                <button type="submit" class="btn btn-success">Login</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
