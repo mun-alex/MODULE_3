@@ -21,6 +21,18 @@
                     </a></li>
                 </ul>
             </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownFaculties"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    Faculties
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownFaculties">
+                    <li th:each="faculty:${faculties}"><a class="dropdown-item"
+                                                    th:text="${faculty.facultyName}"
+                                                    th:href="@{'/filter-faculty/' + ${faculty.id}}">
+                    </a></li>
+                </ul>
+            </div>
             <!--            <a class="nav-link text-white fw-bold" th:href="@{'/filter-city/' + ${city.id}}" th:each="city:${cities}" th:text="${city.cityName}"></a>-->
         </div>
         <div layout:fragment="content"></div>

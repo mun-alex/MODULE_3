@@ -29,6 +29,9 @@ public class Student {
     @ManyToOne(fetch = FetchType.EAGER)
     private City city;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Faculty faculty;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Sport> sportList;
 }

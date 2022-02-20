@@ -13,6 +13,7 @@
             <th scope="col">Name</th>
             <th scope="col">Birthday</th>
             <th scope="col">City</th>
+            <th scope="col">Faculty</th>
             <th scope="col" class="text-center">Details</th>
             <th scope="col" class="text-center">Delete</th>
         </tr>
@@ -23,6 +24,7 @@
             <td th:text="${student.name}"></td>
             <td th:text="${student.birthday}"></td>
             <td th:text="${student.city!=null?student.city.cityName:''}"></td>
+            <td th:text="${student.faculty!=null?student.faculty.facultyName:''}"></td>
             <td class="text-center"><a th:href="@{'/details/' + ${student.id}}" class="btn btn-success">Details</a></td>
             <td class="text-center"><a th:href="@{'/delete-student/' + ${student.id}}" class="btn btn-danger">Delete</a></td>
         </tr>

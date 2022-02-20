@@ -3,6 +3,7 @@ package kz.bitlab.m3_ch1.controllers;
 import kz.bitlab.m3_ch1.entities.Sport;
 import kz.bitlab.m3_ch1.entities.Student;
 import kz.bitlab.m3_ch1.service.CityService;
+import kz.bitlab.m3_ch1.service.FacultyService;
 import kz.bitlab.m3_ch1.service.SportService;
 import kz.bitlab.m3_ch1.service.StudentService;
 import org.dom4j.rule.Mode;
@@ -27,12 +28,16 @@ public class MainController {
     private SportService sportService;
 
     @Autowired
+    private FacultyService facultyService;
+
+    @Autowired
     private Student emptyStudent;
 
     @GetMapping
     public String getAllStudents(Model model) {
         model.addAttribute("students", studentService.getAllStudents());
         model.addAttribute("cities", cityService.getAllCities());
+        model.addAttribute("faculties", facultyService.getAllFaculties());
         model.addAttribute("student", emptyStudent);
         return "index";
     }
@@ -89,6 +94,16 @@ public class MainController {
                                     Model model) {
         model.addAttribute("students", studentService.getAllStudentsByCityId(cityId));
         model.addAttribute("cities", cityService.getAllCities());
+        model.addAttribute("student", emptyStudent);
+        return "index";
+    }
+
+    @GetMapping(value = "/filter-faculty/{facultyId}")
+    public String allStudentsByFaculty(@PathVariable(name = "facultyId") Long facultyId,
+                                    Model model) {
+        model.addAttribute("students", studentService.getAllStudentsByFacultyId(facultyId));
+        model.addAttribute("cities", cityService.getAllCities());
+        model.addAttribute("faculties", facultyService.getAllFaculties());
         model.addAttribute("student", emptyStudent);
         return "index";
     }
