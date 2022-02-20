@@ -6,14 +6,26 @@
 <body>
 <div class="container">
     <div th:replace="fragments/nav :: nav"></div>
-    <h3 class="text-center mt-3">Students</h3>
-    <div class="row">
-        <div class="col-lg-2 bg-secondary pt-3">
-            <a class="nav-link text-white fw-bold" th:href="@{'/filter-city/' + ${city.id}}" th:each="city:${cities}" th:text="${city.cityName}"></a>
+    <div class="row mt-3">
+        <div class="col-lg-2 bg-secondary pt-3 pb-3">
+            <h6 class="mt-5 mb-3 text-white">Filters</h6>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownCities"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    Cities
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownCities">
+                    <li th:each="city:${cities}"><a class="dropdown-item"
+                           th:text="${city.cityName}"
+                           th:href="@{'/filter-city/' + ${city.id}}">
+                    </a></li>
+                </ul>
+            </div>
+            <!--            <a class="nav-link text-white fw-bold" th:href="@{'/filter-city/' + ${city.id}}" th:each="city:${cities}" th:text="${city.cityName}"></a>-->
         </div>
         <div layout:fragment="content"></div>
     </div>
+    <div th:replace="fragments/footer :: footer"></div>
 </div>
-
 </body>
 </html>
