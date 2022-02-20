@@ -6,6 +6,12 @@
     <div th:replace="fragments/nav :: nav"></div>
     <div class="row">
         <div class="col-lg-4 m-auto mt-5">
+            <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                Email or Password is wrong. Please, try again!
+            </div>
+            <div th:if="${param.logout}" class="alert alert-danger" role="alert">
+                You have been logged out.
+            </div>
             <form th:action="@{'/auth'}" method="post">
                 <div class="mb-3">
                     <label for="userEmail" class="form-label">Email:</label>
