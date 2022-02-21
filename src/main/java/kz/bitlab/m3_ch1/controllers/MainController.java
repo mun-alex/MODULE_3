@@ -2,12 +2,15 @@ package kz.bitlab.m3_ch1.controllers;
 
 import kz.bitlab.m3_ch1.entities.Sport;
 import kz.bitlab.m3_ch1.entities.Student;
-import kz.bitlab.m3_ch1.service.CityService;
-import kz.bitlab.m3_ch1.service.FacultyService;
-import kz.bitlab.m3_ch1.service.SportService;
-import kz.bitlab.m3_ch1.service.StudentService;
+import kz.bitlab.m3_ch1.entities.UniUser;
+import kz.bitlab.m3_ch1.service.*;
 import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,14 +34,19 @@ public class MainController {
     private FacultyService facultyService;
 
     @Autowired
+    private UniUserService uniUserService;
+
+    @Autowired
     private Student emptyStudent;
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public String getAllStudents(Model model) {
         model.addAttribute("students", studentService.getAllStudents());
         model.addAttribute("cities", cityService.getAllCities());
         model.addAttribute("faculties", facultyService.getAllFaculties());
         model.addAttribute("student", emptyStudent);
+        model.addAttribute("currentUser", getUserData());
         return "index";
     }
 
@@ -49,6 +57,7 @@ public class MainController {
     }
 
     @GetMapping(value = "/details/{studentId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String getStudentById(Model model, @PathVariable(name = "studentId") Long id) {
         model.addAttribute("student", studentService.getStudentById(id));
         model.addAttribute("cities", cityService.getAllCities());
@@ -106,5 +115,25 @@ public class MainController {
         model.addAttribute("faculties", facultyService.getAllFaculties());
         model.addAttribute("student", emptyStudent);
         return "index";
+    }
+
+    @GetMapping(value = "/login")
+    public String login() {
+        return "/login";
+    }
+
+    @GetMapping(value = "/403")
+    public String accessDenied() {
+        return"/403";
+    }
+
+    public UniUser getUserData() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            User secUser = (User) authentication.getPrincipal();
+            UniUser uniUser = uniUserService.getUserByEmail(secUser.getUsername());
+            return uniUser;
+        }
+        return null;
     }
 }
