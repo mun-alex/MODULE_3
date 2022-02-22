@@ -136,4 +136,9 @@ public class MainController {
         }
         return null;
     }
+
+    @GetMapping(value = "/register")
+    public String register() {
+        return "/register";
+    }
 }

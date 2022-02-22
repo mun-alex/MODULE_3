@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div class="container">
+    <div th:replace="fragments/nav :: nav"></div>
+    <div class="row">
+        <div class="col-lg-4 m-auto mt-5">
+            <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                Email or Password is wrong. Please, try again!
+            </div>
+            <div th:if="${param.logout}" class="alert alert-danger" role="alert">
+                You have been logged out.
+            </div>
+            <form th:action="@{'/signup'}" method="post">
+                <div class="mb-3">
+                    <label for="userName" class="form-label">Name:</label>
+                    <input type="text" class="form-control" id="userName" name="uni_user_name">
+                </div>
+                <div class="mb-3">
+                    <label for="userEmail" class="form-label">Email:</label>
+                    <input type="text" class="form-control" id="userEmail" name="uni_user_email">
+                </div>
+                <div class="mb-3">
+                    <label for="userPassword" class="form-label">Password:</label>
+                    <input type="password" class="form-control" id="userPassword" name="uni_user_password">
+                </div>
+                <div class="mb-3">
+                    <label for="userRePassword" class="form-label">Re-Password:</label>
+                    <input type="password" class="form-control" id="userRePassword" name="uni_user_repassword">
+                </div>
+                <button type="submit" class="btn btn-success">Sign up</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
