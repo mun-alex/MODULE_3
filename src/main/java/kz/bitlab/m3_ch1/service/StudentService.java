@@ -9,6 +9,7 @@ public interface StudentService {
     List<Student> getAllStudents();
     List<Student> getAllStudentsByCityId(Long id);
     List<Student> getAllStudentsByFacultyId(Long id);
+    List<Student> getAllStudentsByCityIdAndfFacultyId(Long cityId, Long facultyId);
     void addStudent(Student student);
     Student getStudentById(Long id);
     void updateStudent(Student student);

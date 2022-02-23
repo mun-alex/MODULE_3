@@ -5,4 +5,5 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UniUserService extends UserDetailsService {
     UniUser getUserByEmail(String email);
+    UniUser createUser(UniUser newUser);
 }

@@ -37,6 +37,9 @@ public class MainController {
     private UniUserService uniUserService;
 
     @Autowired
+    private UniUser emptyUniUser;
+
+    @Autowired
     private Student emptyStudent;
 
     @GetMapping
@@ -109,7 +112,7 @@ public class MainController {
 
     @GetMapping(value = "/filter-faculty/{facultyId}")
     public String allStudentsByFaculty(@PathVariable(name = "facultyId") Long facultyId,
-                                    Model model) {
+                                       Model model) {
         model.addAttribute("students", studentService.getAllStudentsByFacultyId(facultyId));
         model.addAttribute("cities", cityService.getAllCities());
         model.addAttribute("faculties", facultyService.getAllFaculties());
@@ -124,7 +127,7 @@ public class MainController {
 
     @GetMapping(value = "/403")
     public String accessDenied() {
-        return"/403";
+        return "/403";
     }
 
     public UniUser getUserData() {
@@ -138,7 +141,37 @@ public class MainController {
     }
 
     @GetMapping(value = "/register")
-    public String register() {
+    public String register(Model model) {
+        model.addAttribute("uniUser", emptyUniUser);
         return "/register";
     }
+
+    @PostMapping(value = "/register")
+    public String register(@ModelAttribute(name = "uniUser") UniUser newUser,
+                           @RequestParam(name = "uni_user_repassword") String repass) {
+
+        if (newUser.getPassword().equals(repass)) {
+            UniUser user = uniUserService.createUser(newUser);
+
+            if (user != null) {
+                return "redirect:/login?successRegister";
+            }
+            return "redirect:/register?errorEmail";
+        }
+        return "redirect:/register?errorPass";
+    }
+
+    @GetMapping(value = "/filter-city-and-faculty/{cityId}/{facultyId}")
+    public String allStudentsByCityAndFaculty(
+                                                @PathVariable(name = "cityId") Long cityId,
+                                                @PathVariable(name = "facultyId") Long facultyId,
+                                                Model model) {
+        model.addAttribute("students", studentService.getAllStudentsByCityIdAndfFacultyId(cityId, facultyId));
+        model.addAttribute("cities", cityService.getAllCities());
+        model.addAttribute("faculties", facultyService.getAllFaculties());
+        model.addAttribute("student", emptyStudent);
+        model.addAttribute("currentUser", getUserData());
+        return "index";
+    }
+
 }

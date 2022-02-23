@@ -48,4 +48,9 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> getAllStudentsByFacultyId(Long id) {
         return studentRepository.findAllByFacultyId(id);
     }
+
+    @Override
+    public List<Student> getAllStudentsByCityIdAndfFacultyId(Long cityId, Long facultyId) {
+        return studentRepository.findAllByCityIdAndFacultyId(cityId, facultyId);
+    }
 }
