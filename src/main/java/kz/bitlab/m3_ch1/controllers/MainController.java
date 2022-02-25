@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller
+@RestController
 public class MainController {
 
     @Autowired
@@ -42,25 +42,47 @@ public class MainController {
     @Autowired
     private Student emptyStudent;
 
+//    @GetMapping
+//    @PreAuthorize("isAuthenticated()")
+//    public String getAllStudents(Model model) {
+//        model.addAttribute("students", studentService.getAllStudents());
+//        model.addAttribute("cities", cityService.getAllCities());
+//        model.addAttribute("faculties", facultyService.getAllFaculties());
+//        model.addAttribute("student", emptyStudent);
+//        model.addAttribute("currentUser", getUserData());
+//        return "index";
+//    }
+
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
-    public String getAllStudents(Model model) {
-        model.addAttribute("students", studentService.getAllStudents());
-        model.addAttribute("cities", cityService.getAllCities());
-        model.addAttribute("faculties", facultyService.getAllFaculties());
-        model.addAttribute("student", emptyStudent);
-        model.addAttribute("currentUser", getUserData());
-        return "index";
+    public List<Student> allStudents() {
+        return studentService.getAllStudents();
     }
 
-    @PostMapping(value = "/add-student")
-    public String addStudent(@ModelAttribute(name = "student") Student student) {
+//    @PostMapping(value = "/add-student")
+//    public String addStudent(@ModelAttribute(name = "student") Student student) {
+//        studentService.addStudent(student);
+//        return "redirect:/";
+//    }
+
+    @PostMapping(value = "/student")
+    public String addStudent(@RequestBody Student student) {
         studentService.addStudent(student);
-        return "redirect:/";
+        return "success";
+    }
+
+    @DeleteMapping(value = "/student/{id}")
+    public String deleteStudent(@PathVariable Long id) {
+        studentService.deleteStudentById(id);
+        return "deleted";
+    }
+
+    @GetMapping(value = "/student/{id}")
+    public Student getStudent(@PathVariable (name = "id") Long id) {
+        return studentService.getStudentById(id);
     }
 
     @GetMapping(value = "/details/{studentId}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String getStudentById(Model model, @PathVariable(name = "studentId") Long id) {
         model.addAttribute("student", studentService.getStudentById(id));
         model.addAttribute("cities", cityService.getAllCities());
@@ -76,11 +98,11 @@ public class MainController {
         return "redirect:/";
     }
 
-    @GetMapping(value = "/delete-student/{studentId}")
-    public String deleteStudent(@PathVariable(name = "studentId") Long studentId) {
-        studentService.deleteStudentById(studentId);
-        return "redirect:/";
-    }
+//    @GetMapping(value = "/delete-student/{studentId}")
+//    public String deleteStudent(@PathVariable(name = "studentId") Long studentId) {
+//        studentService.deleteStudentById(studentId);
+//        return "redirect:/";
+//    }
 
     @PostMapping(value = "/add-sport")
     public String addSport(@RequestParam(name = "studentId") Long studentId,
