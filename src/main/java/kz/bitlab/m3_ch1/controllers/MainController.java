@@ -4,8 +4,14 @@ import kz.bitlab.m3_ch1.entities.Sport;
 import kz.bitlab.m3_ch1.entities.Student;
 import kz.bitlab.m3_ch1.entities.UniUser;
 import kz.bitlab.m3_ch1.service.*;
+import org.apache.commons.codec.cli.Digest;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.IOUtils;
 import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,11 +20,17 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
+@Controller
 public class MainController {
 
     @Autowired
@@ -42,39 +54,72 @@ public class MainController {
     @Autowired
     private Student emptyStudent;
 
-//    @GetMapping
-//    @PreAuthorize("isAuthenticated()")
-//    public String getAllStudents(Model model) {
-//        model.addAttribute("students", studentService.getAllStudents());
-//        model.addAttribute("cities", cityService.getAllCities());
-//        model.addAttribute("faculties", facultyService.getAllFaculties());
-//        model.addAttribute("student", emptyStudent);
-//        model.addAttribute("currentUser", getUserData());
-//        return "index";
-//    }
+    @Value("${file.photo.upload}")
+    private String uploadPath;
+
+    @Value("${file.photo.upload.target}")
+    private String uploadPathTarget;
+
+    @Value("${file.photo.view}")
+    private String viewPath;
+
+    @Value("${file.photo.default}")
+    private String defaultPhoto;
 
     @GetMapping
-    public List<Student> allStudents() {
-        return studentService.getAllStudents();
+    @PreAuthorize("isAuthenticated()")
+    public String getAllStudents(Model model) {
+        model.addAttribute("students", studentService.getAllStudents());
+        model.addAttribute("cities", cityService.getAllCities());
+        model.addAttribute("faculties", facultyService.getAllFaculties());
+        model.addAttribute("student", emptyStudent);
+        model.addAttribute("currentUser", getUserData());
+        return "index";
     }
 
-//    @PostMapping(value = "/add-student")
-//    public String addStudent(@ModelAttribute(name = "student") Student student) {
-//        studentService.addStudent(student);
-//        return "redirect:/";
+//    @GetMapping
+//    public List<Student> allStudents() {
+//        return studentService.getAllStudents();
 //    }
 
-    @PostMapping(value = "/student")
-    public String addStudent(@RequestBody Student student) {
+    @PostMapping(value = "/add-student")
+    public String addStudent(@ModelAttribute(name = "student") Student student,
+                             @RequestParam(name = "studentPhoto") MultipartFile file) {
+        String studentPhoto = uploadPhoto(file);
+        student.setPhoto(studentPhoto);
         studentService.addStudent(student);
-        return "success";
+        return "redirect:/";
     }
 
-    @DeleteMapping(value = "/student/{id}")
-    public String deleteStudent(@PathVariable Long id) {
-        studentService.deleteStudentById(id);
-        return "deleted";
+    @GetMapping(value = "/view-photo/{photoName}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    public @ResponseBody byte[] viewStudentPhoto(@PathVariable(name = "photoName") String photoName) throws IOException {
+        String photoUrl = viewPath + defaultPhoto;
+        if (photoName != null) {
+            photoUrl = viewPath + photoName + ".jpg";
+        }
+        InputStream inputStream;
+        try {
+            ClassPathResource resource = new ClassPathResource(photoUrl);
+            inputStream = resource.getInputStream();
+        } catch (Exception e) {
+            ClassPathResource resource = new ClassPathResource(viewPath + defaultPhoto);
+            inputStream = resource.getInputStream();
+            e.printStackTrace();
+        }
+        return IOUtils.toByteArray(inputStream);
     }
+
+//    @PostMapping(value = "/student")
+//    public String addStudent(@RequestBody Student student) {
+//        studentService.addStudent(student);
+//        return "success";
+//    }
+
+//    @DeleteMapping(value = "/student/{id}")
+//    public String deleteStudent(@PathVariable Long id) {
+//        studentService.deleteStudentById(id);
+//        return "deleted";
+//    }
 
     @GetMapping(value = "/student/{id}")
     public Student getStudent(@PathVariable (name = "id") Long id) {
@@ -87,22 +132,28 @@ public class MainController {
         model.addAttribute("student", studentService.getStudentById(id));
         model.addAttribute("cities", cityService.getAllCities());
         model.addAttribute("sports", sportService.getAllSports());
+        model.addAttribute("currentUser", getUserData());
         return "/details";
     }
 
     @PostMapping(value = "/update-student/{studentId}")
     public String updateStudent(@PathVariable(name = "studentId") Long studentId,
-                                @ModelAttribute(name = "student") Student student) {
+                                @ModelAttribute(name = "student") Student student,
+                                @RequestParam(name = "studentPhoto") MultipartFile file) {
+        if (!file.isEmpty()) {
+            student.setPhoto(uploadPhoto(file));
+        }
+
         student.setId(studentId);
         studentService.updateStudent(student);
         return "redirect:/";
     }
 
-//    @GetMapping(value = "/delete-student/{studentId}")
-//    public String deleteStudent(@PathVariable(name = "studentId") Long studentId) {
-//        studentService.deleteStudentById(studentId);
-//        return "redirect:/";
-//    }
+    @GetMapping(value = "/delete-student/{studentId}")
+    public String deleteStudent(@PathVariable(name = "studentId") Long studentId) {
+        studentService.deleteStudentById(studentId);
+        return "redirect:/";
+    }
 
     @PostMapping(value = "/add-sport")
     public String addSport(@RequestParam(name = "studentId") Long studentId,
@@ -196,4 +247,21 @@ public class MainController {
         return "index";
     }
 
+    public String uploadPhoto(MultipartFile file) {
+        String photoName = DigestUtils.sha1Hex("photo" + file.getOriginalFilename());
+
+        if (file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/png")) {
+            try {
+                Path path = Paths.get(uploadPath + photoName + ".jpg");
+                Path pathTarget = Paths.get(uploadPathTarget + photoName + ".jpg");
+                byte[] bytes = file.getBytes();
+                Files.write(path, bytes);
+                Files.write(pathTarget, bytes);
+                return photoName;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 }

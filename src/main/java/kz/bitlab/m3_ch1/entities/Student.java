@@ -26,6 +26,9 @@ public class Student {
     @Column(name = "student_birthday", length = 100)
     private String birthday;
 
+    @Column(name = "photo")
+    private String photo;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private City city;
 
